@@ -11,6 +11,8 @@ import java.net.URL;
 
 import org.apache.http.HttpConnection;
 
+import android.util.Log;
+
 public class HttpUtil
 {
 	public static void sendHttpRequest(final String address,final HttpCallbackListener listener)
@@ -47,6 +49,7 @@ public class HttpUtil
 					}
 				} catch (Exception e)
 				{
+					Log.d("connection", "HttpUtil");
 					if (listener!=null)
 					{
 						listener.onError(e);

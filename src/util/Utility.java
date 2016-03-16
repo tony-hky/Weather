@@ -23,6 +23,11 @@ public class Utility
 			String[] allProvinces=response.split(",");
 			if (allProvinces !=null &&allProvinces.length>0);
 			{
+				/*
+				 * p表示的其实就是v中得任意一个元素，allProvice是数组，也可以是集合，如list或set。
+				 * 这种语句叫做foreach语句。其实就是Iterator迭代器的简化
+				 * 意思就是循环的从v中拿出一个元素s进行操作
+				 */
 				for(String p:allProvinces)
 				{
 					String[]arry=p.split("\\|");

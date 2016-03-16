@@ -12,6 +12,7 @@ import android.database.Cursor;
  *
  */
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import db.CoolWeatherOpenHelper;
 
 public class CoolWeatherDB
@@ -113,32 +114,41 @@ public class CoolWeatherDB
 	}
 
 	/*
-	 * 从数据库读取某省下所有的城市信息
+	 * 从数据库读取某省下所有的城市信息到链表list上
 	 */
 	public List<City> loadcities(int provinceId)
 	{
-		List<City> list = new ArrayList<City>();
-		/*
-		 * 同样第一个参数为表名,第二个参数为列名,即字段 第三个参数为条件,第四个参数为条件值,第五个参数为分组操作
-		 * 第六个参数为过滤操作,第七个参数为排序操作
-		 */
-		Cursor cursor = db.query("City", null, "provinceID=?", new String[]
-		{ String.valueOf(provinceId) }, null, null, null);
-		if (cursor.moveToFirst())
-		{
-			do
+
+
+			List<City> list = new ArrayList<City>();
+			/*
+			 * 同样第一个参数为表名,第二个参数为列名,即字段 第三个参数为条件,第四个参数为条件值,第五个参数为分组操作
+			 * 第六个参数为过滤操作,第七个参数为排序操作
+			 */
+			try{
+			Cursor cursor = db.query("City", null, "province_id=?", new String[]
+			{ String.valueOf(provinceId) }, null, null, null);
+			if (cursor.moveToFirst())
 			{
-				City city = new City();
-				city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-				city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-				city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
-				city.setProvinceId(provinceId);
-				list.add(city);
-			} while (cursor.moveToNext());
-		}
-		if (cursor != null)
+				do
+				{
+					City city = new City();
+					city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+					city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+					city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
+					city.setProvinceId(provinceId);
+					list.add(city);
+				} while (cursor.moveToNext());
+			}
+			if (cursor != null)
+			{
+				cursor.close();
+			}
+			
+		} catch (Exception e)
 		{
-			cursor.close();
+			Log.d("Loadcities", "===Loadcities===");
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -165,7 +175,7 @@ public class CoolWeatherDB
 	public List<Country> loadCountries(int cityId)
 	{
 		List<Country> list=new ArrayList<Country>();
-		Cursor cursor = db.query("Country", null, "cityI_id=?", new String[]
+		Cursor cursor = db.query("Country", null, "city_id=?", new String[]
 				{ String.valueOf(cityId) }, null, null, null);
 				if (cursor.moveToFirst())
 				{
